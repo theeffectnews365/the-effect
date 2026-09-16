@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>THE EFFECT | সংবাদ, বিশ্লেষণ ও তথ্য</title>
+
+    <meta name="description" content="THE EFFECT — বাংলাদেশ, আন্তর্জাতিক, রাজনীতি, অর্থনীতি, ইতিহাস, শিক্ষা, খেলাধুলা ও সর্বশেষ সংবাদ।">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- TOP DATE & TIME BAR -->
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+
+            <div class="date-area">
+                <span id="banglaDate">বাংলা তারিখ</span>
+                <span class="separator">|</span>
+                <span id="englishDate">English Date</span>
+            </div>
+
+            <div class="time-area">
+                <span id="englishTime">00:00:00</span>
+                <span class="time-label">BST</span>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- HEADER -->
+    <header class="site-header">
+
+        <div class="container header-main">
+
+            <div class="brand-area">
+
+                <a href="index.html" class="logo-link">
+
+                    <div class="logo-text">
+                        <span class="the-word">THE</span>
+                        <span class="effect-word">EFFECT</span>
+                    </div>
+
+                </a>
+
+                <div class="tagline">
+                    সংবাদ • বিশ্লেষণ • তথ্য
+                </div>
+
+            </div>
+
+            <div class="header-ad">
+                <span>ADVERTISEMENT</span>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+
+        <div class="container nav-container">
+
+            <div class="nav-scroll">
+
+                <a href="#" class="nav-item active">প্রচ্ছদ</a>
+                <a href="#" class="nav-item">বাংলাদেশ</a>
+                <a href="#" class="nav-item">আন্তর্জাতিক</a>
+                <a href="#" class="nav-item">খেলাধুলা</a>
+                <a href="#" class="nav-item">ইতিহাস</a>
+                <a href="#" class="nav-item">শিক্ষা</a>
+                <a href="#" class="nav-item">মতামত</a>
+                <a href="#" class="nav-item">বাণিজ্য</a>
+                <a href="#" class="nav-item">সর্বশেষ</a>
+                <a href="#" class="nav-item">রাজনীতি</a>
+                <a href="#" class="nav-item">অর্থনীতি</a>
+                <a href="#" class="nav-item">বিনোদন</a>
+                <a href="#" class="nav-item">চাকরি</a>
+                <a href="#" class="nav-item">ধর্ম</a>
+                <a href="#" class="nav-item">প্রযুক্তি</a>
+                <a href="#" class="nav-item">বিবিধ</a>
+
+            </div>
+
+
+            <!-- SEARCH -->
+            <button class="search-button" id="searchButton" aria-label="Search">
+                <span class="search-icon">⌕</span>
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <!-- SEARCH BOX -->
+    <div class="search-panel" id="searchPanel">
+
+        <div class="container search-inner">
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="সংবাদ খুঁজুন..."
+                autocomplete="off"
+            >
+
+            <button id="searchSubmit">খুঁজুন</button>
+
+        </div>
+
+    </div>
+
+
+    <!-- BREAKING NEWS -->
+    <section class="breaking-section">
+
+        <div class="container breaking-wrapper">
+
+            <div class="breaking-label">
+                ব্রেকিং
+            </div>
+
+            <div class="breaking-news">
+
+                <div class="breaking-track" id="breakingTrack">
+                    <span>এই মুহূর্তে কোনো ব্রেকিং নিউজ নেই</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ADVERTISEMENT SPACE -->
+    <section class="ad-section">
+
+        <div class="container">
+
+            <div class="ad-box">
+                <span>ADVERTISEMENT</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="container main-content">
+
+        <!-- NEWS AREA -->
+        <section class="news-section">
+
+            <div class="section-heading">
+                <h1>সর্বশেষ সংবাদ</h1>
+                <div class="heading-line"></div>
+            </div>
+
+
+            <!--
+                এখানে Data Entry থেকে News আসবে।
+                শুরুতে এটি সম্পূর্ণ Blank থাকবে।
+            -->
+
+            <div id="newsContainer" class="news-container">
+
+                <!-- News will appear here automatically -->
+
+            </div>
+
+
+            <!-- NO NEWS MESSAGE -->
+            <div id="emptyNews" class="empty-news">
+
+                <div class="empty-icon">THE EFFECT</div>
+
+                <h2>এখনও কোনো সংবাদ প্রকাশিত হয়নি</h2>
+
+                <p>
+                    নতুন সংবাদ প্রকাশিত হলে এই স্থানে সংবাদ প্রদর্শিত হবে।
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-ad">
+                <span>ADVERTISEMENT</span>
+            </div>
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-title">
+                    জনপ্রিয়
+                </div>
+
+                <div id="popularNews">
+
+                    <!-- Popular news will appear here -->
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- FOOTER AD -->
+    <section class="ad-section footer-ad-section">
+
+        <div class="container">
+
+            <div class="ad-box large-ad">
+                <span>ADVERTISEMENT</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+
+        <div class="container footer-content">
+
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <span>THE</span> <strong>EFFECT</strong>
+                </div>
+
+                <p>
+                    সংবাদ, বিশ্লেষণ ও তথ্যের একটি স্বাধীন প্ল্যাটফর্ম।
+                </p>
+            </div>
+
+
+            <div class="footer-links">
+
+                <a href="#">আমাদের সম্পর্কে</a>
+                <a href="#">যোগাযোগ</a>
+                <a href="#">গোপনীয়তা নীতি</a>
+                <a href="#">ব্যবহারের শর্তাবলি</a>
+
+            </div>
+
+        </div>
+
+
+        <div class="copyright">
+
+            © <span id="currentYear"></span> THE EFFECT. All Rights Reserved.
+
+        </div>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

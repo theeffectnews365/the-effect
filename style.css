@@ -1,0 +1,830 @@
+/* =========================================================
+   THE EFFECT — MAIN STYLESHEET
+   ========================================================= */
+
+:root {
+    --banana: #fff500;
+    --banana-dark: #d8cc00;
+    --black: #080808;
+    --dark: #101010;
+    --dark-2: #161616;
+    --dark-3: #202020;
+    --white: #ffffff;
+    --gray: #a8a8a8;
+    --border: #303030;
+    --red: #e00000;
+
+    --max-width: 1280px;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--black);
+    color: var(--white);
+    font-family: "Noto Sans Bengali", sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   COMMON
+   ========================================================= */
+
+.container {
+    width: min(94%, var(--max-width));
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.top-bar {
+    background: #050505;
+    border-bottom: 1px solid var(--border);
+    color: #d0d0d0;
+    font-size: 13px;
+}
+
+.top-bar-inner {
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.date-area,
+.time-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.separator {
+    color: #555;
+}
+
+.time-area {
+    color: var(--banana);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.time-label {
+    color: #888;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.site-header {
+    background: var(--dark);
+    border-bottom: 1px solid var(--border);
+}
+
+.header-main {
+    min-height: 145px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.brand-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo-link {
+    display: inline-block;
+}
+
+.logo-text {
+    font-family: "Anton", sans-serif;
+    font-size: clamp(58px, 8vw, 92px);
+    line-height: 0.9;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.the-word {
+    color: var(--white);
+}
+
+.effect-word {
+    color: var(--banana);
+}
+
+.tagline {
+    margin-top: 13px;
+    color: #bcbcbc;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.header-ad {
+    width: 420px;
+    max-width: 40%;
+    height: 90px;
+    border: 1px dashed #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.main-nav {
+    background: var(--dark-2);
+    border-bottom: 2px solid var(--banana);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    align-items: stretch;
+    min-height: 52px;
+}
+
+.nav-scroll {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.nav-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-item {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 17px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #eeeeee;
+    border-right: 1px solid #303030;
+    transition: 0.2s ease;
+    white-space: nowrap;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: var(--banana);
+    color: #080808;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.search-button {
+    width: 55px;
+    flex: 0 0 55px;
+    border: none;
+    border-left: 1px solid #333;
+    background: #0b0b0b;
+    color: var(--banana);
+    font-size: 30px;
+    transition: 0.2s ease;
+}
+
+.search-button:hover {
+    background: var(--banana);
+    color: #000;
+}
+
+.search-icon {
+    display: block;
+    transform: rotate(-20deg);
+}
+
+.search-panel {
+    display: none;
+    background: #0b0b0b;
+    border-bottom: 1px solid var(--border);
+    padding: 15px 0;
+}
+
+.search-panel.show {
+    display: block;
+}
+
+.search-inner {
+    display: flex;
+    gap: 10px;
+}
+
+.search-inner input {
+    flex: 1;
+    min-width: 0;
+    height: 46px;
+    border: 1px solid #444;
+    background: #171717;
+    color: white;
+    padding: 0 15px;
+    outline: none;
+    font-size: 15px;
+}
+
+.search-inner input:focus {
+    border-color: var(--banana);
+}
+
+.search-inner button {
+    width: 90px;
+    border: none;
+    background: var(--banana);
+    color: #000;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   BREAKING NEWS
+   ========================================================= */
+
+.breaking-section {
+    background: #0b0b0b;
+    border-bottom: 1px solid var(--border);
+}
+
+.breaking-wrapper {
+    display: flex;
+    min-height: 45px;
+    align-items: stretch;
+}
+
+.breaking-label {
+    background: var(--red);
+    color: white;
+    font-weight: 800;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.breaking-news {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+}
+
+.breaking-track {
+    white-space: nowrap;
+    color: #eee;
+    animation: breakingMove 18s linear infinite;
+}
+
+.breaking-track span {
+    margin-right: 80px;
+}
+
+@keyframes breakingMove {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+
+/* =========================================================
+   ADVERTISEMENT
+   ========================================================= */
+
+.ad-section {
+    padding: 20px 0;
+}
+
+.ad-box {
+    height: 110px;
+    border: 1px dashed #353535;
+    background: #0d0d0d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.large-ad {
+    height: 150px;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 30px;
+    padding-top: 15px;
+    padding-bottom: 40px;
+}
+
+
+/* =========================================================
+   SECTION HEADING
+   ========================================================= */
+
+.section-heading {
+    margin-bottom: 20px;
+}
+
+.section-heading h1 {
+    font-family: "Noto Serif Bengali", serif;
+    font-size: 27px;
+    font-weight: 800;
+    color: white;
+    display: inline-block;
+}
+
+.heading-line {
+    width: 100%;
+    height: 3px;
+    margin-top: 9px;
+    background: linear-gradient(
+        to right,
+        var(--banana) 0,
+        var(--banana) 180px,
+        #333 180px,
+        #333 100%
+    );
+}
+
+
+/* =========================================================
+   NEWS CONTAINER
+   ========================================================= */
+
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* =========================================================
+   NEWS CARD
+   ========================================================= */
+
+.news-card {
+    background: var(--dark-2);
+    border: 1px solid #292929;
+    overflow: hidden;
+    transition: 0.25s ease;
+}
+
+.news-card:hover {
+    border-color: var(--banana);
+    transform: translateY(-2px);
+}
+
+.news-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    background: #1b1b1b;
+}
+
+.news-card-content {
+    padding: 17px;
+}
+
+.news-category {
+    display: inline-block;
+    color: var(--banana);
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.news-title {
+    font-family: "Noto Serif Bengali", serif;
+    font-size: 21px;
+    line-height: 1.45;
+    font-weight: 800;
+    margin-bottom: 9px;
+}
+
+.news-title:hover {
+    color: var(--banana);
+}
+
+.news-description {
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.news-meta {
+    color: #777;
+    font-size: 12px;
+    border-top: 1px solid #292929;
+    padding-top: 10px;
+}
+
+
+/* =========================================================
+   EMPTY NEWS
+   ========================================================= */
+
+.empty-news {
+    min-height: 260px;
+    border: 1px solid #252525;
+    background: #0e0e0e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+}
+
+.empty-icon {
+    font-family: "Anton", sans-serif;
+    color: var(--banana);
+    font-size: 28px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.empty-news h2 {
+    font-family: "Noto Serif Bengali", serif;
+    font-size: 22px;
+    margin-bottom: 7px;
+}
+
+.empty-news p {
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.sidebar-ad {
+    height: 260px;
+    border: 1px dashed #333;
+    background: #0c0c0c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.sidebar-section {
+    background: #101010;
+    border: 1px solid #282828;
+}
+
+.sidebar-title {
+    background: var(--banana);
+    color: #000;
+    font-family: "Noto Serif Bengali", serif;
+    font-weight: 800;
+    padding: 9px 15px;
+    font-size: 18px;
+}
+
+#popularNews {
+    padding: 5px 15px;
+}
+
+.popular-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #292929;
+}
+
+.popular-item:last-child {
+    border-bottom: none;
+}
+
+.popular-number {
+    color: var(--banana);
+    font-family: "Anton", sans-serif;
+    font-size: 22px;
+    margin-right: 8px;
+}
+
+.popular-title {
+    font-family: "Noto Serif Bengali", serif;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.site-footer {
+    background: #050505;
+    border-top: 2px solid var(--banana);
+    margin-top: 20px;
+}
+
+.footer-content {
+    min-height: 190px;
+    padding: 35px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.footer-logo {
+    font-family: "Anton", sans-serif;
+    font-size: 35px;
+    letter-spacing: 1px;
+}
+
+.footer-logo span {
+    color: white;
+}
+
+.footer-logo strong {
+    color: var(--banana);
+}
+
+.footer-brand p {
+    color: #777;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 10px 20px;
+    max-width: 500px;
+}
+
+.footer-links a {
+    color: #999;
+    font-size: 13px;
+}
+
+.footer-links a:hover {
+    color: var(--banana);
+}
+
+.copyright {
+    border-top: 1px solid #1e1e1e;
+    color: #555;
+    text-align: center;
+    padding: 14px;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .header-main {
+        min-height: 125px;
+    }
+
+    .header-ad {
+        width: 300px;
+        height: 75px;
+    }
+
+    .main-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sidebar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .container {
+        width: 94%;
+    }
+
+    .top-bar-inner {
+        min-height: 34px;
+        font-size: 10px;
+    }
+
+    .date-area {
+        gap: 5px;
+    }
+
+    .time-area {
+        font-size: 11px;
+    }
+
+    .header-main {
+        min-height: 105px;
+        display: block;
+        padding: 20px 0;
+    }
+
+    .logo-text {
+        font-size: 54px;
+    }
+
+    .tagline {
+        font-size: 11px;
+        margin-top: 8px;
+    }
+
+    .header-ad {
+        display: none;
+    }
+
+    .main-nav {
+        position: sticky;
+        top: 0;
+    }
+
+    .nav-container {
+        min-height: 47px;
+    }
+
+    .nav-item {
+        padding: 0 13px;
+        font-size: 13px;
+    }
+
+    .search-button {
+        width: 47px;
+        flex-basis: 47px;
+        font-size: 26px;
+    }
+
+    .breaking-wrapper {
+        min-height: 42px;
+    }
+
+    .breaking-label {
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+
+    .breaking-news {
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .ad-section {
+        padding: 12px 0;
+    }
+
+    .ad-box {
+        height: 80px;
+    }
+
+    .main-content {
+        padding-top: 8px;
+        gap: 25px;
+    }
+
+    .section-heading h1 {
+        font-size: 22px;
+    }
+
+    .news-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .news-title {
+        font-size: 19px;
+    }
+
+    .news-description {
+        font-size: 13px;
+    }
+
+    .sidebar {
+        display: flex;
+    }
+
+    .sidebar-ad {
+        height: 120px;
+    }
+
+    .footer-content {
+        min-height: auto;
+        padding: 25px 0;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-links {
+        gap: 8px 15px;
+    }
+
+    .large-ad {
+        height: 100px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .logo-text {
+        font-size: 47px;
+    }
+
+    .nav-item {
+        padding: 0 11px;
+        font-size: 12px;
+    }
+
+    .breaking-label {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+}
