@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://theeffectnews365.github.io/the-effect/sitemap.xml
