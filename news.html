@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>THE EFFECT | সংবাদ</title>
+
+    <meta name="description" content="THE EFFECT — সংবাদ, বিশ্লেষণ ও তথ্য।">
+
+    <meta name="theme-color" content="#000000">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        .single-news-page {
+            max-width: 1000px;
+            margin: 30px auto 60px;
+            padding: 0 20px;
+        }
+
+        .single-news-category {
+            display: inline-block;
+            background: #e00000;
+            color: #fff;
+            padding: 6px 14px;
+            font-family: "Noto Sans Bengali", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .single-news-title {
+            font-family: "Noto Serif Bengali", serif;
+            font-size: 42px;
+            line-height: 1.35;
+            margin: 0 0 18px;
+            color: #fff;
+        }
+
+        .single-news-meta {
+            color: #aaa;
+            font-family: "Noto Sans Bengali", sans-serif;
+            font-size: 14px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 18px;
+        }
+
+        .single-news-image {
+            width: 100%;
+            max-height: 600px;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        .single-news-content {
+            color: #eee;
+            font-family: "Noto Serif Bengali", serif;
+            font-size: 19px;
+            line-height: 2;
+            white-space: pre-line;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 10px 18px;
+            background: #fff500;
+            color: #000;
+            text-decoration: none;
+            font-family: "Noto Sans Bengali", sans-serif;
+            font-weight: 700;
+        }
+
+        .news-loading,
+        .news-error {
+            text-align: center;
+            padding: 80px 20px;
+            color: #ccc;
+            font-family: "Noto Sans Bengali", sans-serif;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .single-news-page {
+                margin-top: 20px;
+                padding: 0 15px;
+            }
+
+            .single-news-title {
+                font-size: 28px;
+            }
+
+            .single-news-content {
+                font-size: 17px;
+                line-height: 1.9;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="single-news-page">
+
+        <div id="newsArticle">
+            <div class="news-loading">
+                সংবাদ লোড হচ্ছে...
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbwwIeOGkKq0mc6VJoeYG8l-pxO1NQ1rj3XnP6IBXguHvPAC4gRki3PsPjzlkiN8jWF6_w/exec";
+
+        function escapeHTML(text) {
+            if (text === null || text === undefined) return "";
+
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function getNewsId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("id");
+        }
+
+        async function loadSingleNews() {
+
+            const articleBox = document.getElementById("newsArticle");
+            const newsId = getNewsId();
+
+            if (!newsId) {
+                articleBox.innerHTML = `
+                    <div class="news-error">
+                        সংবাদটি পাওয়া যায়নি।
+                        <br><br>
+                        <a href="index.html" class="back-home">প্রচ্ছদে ফিরে যান</a>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+
+                const response = await fetch(API_URL + "?t=" + Date.now());
+
+                if (!response.ok) {
+                    throw new Error("Network error");
+                }
+
+                const data = await response.json();
+
+                const news = data.find(item => String(item.id) === String(newsId));
+
+                if (!news) {
+                    articleBox.innerHTML = `
+                        <div class="news-error">
+                            সংবাদটি পাওয়া যায়নি।
+                            <br><br>
+                            <a href="index.html" class="back-home">প্রচ্ছদে ফিরে যান</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                document.title = escapeHTML(news.title) + " | THE EFFECT";
+
+                const imageHTML = news.image
+                    ? `<img src="${escapeHTML(news.image)}" alt="${escapeHTML(news.title)}" class="single-news-image">`
+                    : "";
+
+                articleBox.innerHTML = `
+                    <article>
+
+                        <div class="single-news-category">
+                            ${escapeHTML(news.category || "সংবাদ")}
+                        </div>
+
+                        <h1 class="single-news-title">
+                            ${escapeHTML(news.title || "")}
+                        </h1>
+
+                        <div class="single-news-meta">
+                            ${escapeHTML(news.author || "THE EFFECT")}
+                            ${news.date ? " • " + escapeHTML(news.date) : ""}
+                        </div>
+
+                        ${imageHTML}
+
+                        <div class="single-news-content">
+                            ${escapeHTML(news.content || news.short_description || "")}
+                        </div>
+
+                        <a href="index.html" class="back-home">
+                            ← প্রচ্ছদে ফিরে যান
+                        </a>
+
+                    </article>
+                `;
+
+            } catch (error) {
+
+                console.error(error);
+
+                articleBox.innerHTML = `
+                    <div class="news-error">
+                        সংবাদ লোড করা যাচ্ছে না।
+                        <br><br>
+                        <a href="index.html" class="back-home">প্রচ্ছদে ফিরে যান</a>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadSingleNews);
+    </script>
+
+</body>
+</html>
