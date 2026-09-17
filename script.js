@@ -1,43 +1,29 @@
-/* =========================================================
-   THE EFFECT
-   MAIN JAVASCRIPT
-   ========================================================= */
-
-
-/* =========================================================
-   GOOGLE SHEETS / APPS SCRIPT API
-   ========================================================= */
-
-const API_URL =
-    "https://script.google.com/macros/s/AKfycbwwIeOGkKq0mc6VJoeYG8l-pxO1NQ1rj3XnP6IBXguHvPAC4gRki3PsPjzlkiN8jWF6_w/exec";
-
-
-/* =========================================================
-   GLOBAL NEWS DATA
-   ========================================================= */
+const API_URL = "https://script.google.com/macros/s/AKfycbwwIeOGkKq0mc6VJoeYG8l-pxO1NQ1rj3XnP6IBXguHvPAC4gRki3PsPjzlkiN8jWF6_w/exec";
 
 let newsData = [];
 
-
-/* =========================================================
+/* =========================
    BANGLA DATE
-   ========================================================= */
+========================= */
 
-function getBanglaDate() {
+function updateBanglaDate() {
+    const banglaDateElement = document.getElementById("banglaDate");
 
-    const now = new Date();
+    if (!banglaDateElement) return;
 
-    const banglaWeekdays = [
-        "রবিবার",
-        "সোমবার",
-        "মঙ্গলবার",
-        "বুধবার",
-        "বৃহস্পতিবার",
-        "শুক্রবার",
-        "শনিবার"
-    ];
+    const today = new Date();
 
-    const months = [
+    const referenceDate = new Date("2026-09-16T00:00:00");
+    const referenceBanglaDay = 1;
+    const referenceBanglaMonth = 6;
+    const referenceBanglaYear = 1433;
+
+    const difference =
+        Math.floor(
+            (today - referenceDate) / (1000 * 60 * 60 * 24)
+        );
+
+    const monthNames = [
         "বৈশাখ",
         "জ্যৈষ্ঠ",
         "আষাঢ়",
@@ -52,871 +38,467 @@ function getBanglaDate() {
         "চৈত্র"
     ];
 
-    /*
-       ২০২৬ সালের ১৬ সেপ্টেম্বর
-       = ১ আশ্বিন ১৪৩৩
-    */
-
-    const referenceDate =
-        new Date(2026, 8, 16);
-
-    const currentDate =
-        new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate()
-        );
-
-    const difference =
-        Math.floor(
-            (
-                currentDate -
-                referenceDate
-            ) /
-            (1000 * 60 * 60 * 24)
-        );
-
-    let banglaYear = 1433;
-    let banglaMonth = 5;
-    let banglaDay = difference + 1;
-
-    /*
-       ২০২৬ সালের ১৬ সেপ্টেম্বরের
-       আগে হলে সাধারণ fallback
-    */
-
-    if (banglaDay < 1) {
-
-        banglaYear =
-            now.getFullYear() - 593;
-
-        banglaMonth = 0;
-        banglaDay = 1;
-    }
-
     const monthLengths = [
-        31, // বৈশাখ
-        31, // জ্যৈষ্ঠ
-        31, // আষাঢ়
-        31, // শ্রাবণ
-        31, // ভাদ্র
-        30, // আশ্বিন
-        30, // কার্তিক
-        30, // অগ্রহায়ণ
-        30, // পৌষ
-        30, // মাঘ
-        30, // ফাল্গুন
-        30  // চৈত্র
+        31,
+        31,
+        31,
+        31,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30
     ];
 
-    while (
-        banglaDay >
-        monthLengths[banglaMonth]
-    ) {
+    let day = referenceBanglaDay + difference;
+    let month = referenceBanglaMonth;
+    let year = referenceBanglaYear;
 
-        banglaDay -=
-            monthLengths[banglaMonth];
+    while (day > monthLengths[month]) {
+        day -= monthLengths[month];
+        month++;
 
-        banglaMonth++;
-
-        if (banglaMonth > 11) {
-
-            banglaMonth = 0;
-            banglaYear++;
+        if (month >= 12) {
+            month = 0;
+            year++;
         }
     }
 
-    return (
-        banglaWeekdays[now.getDay()] +
-        " " +
-        banglaDay +
-        " " +
-        months[banglaMonth] +
-        " " +
-        banglaYear
-    );
-}
+    while (day <= 0) {
+        month--;
 
-
-/* =========================================================
-   ENGLISH DATE
-   ========================================================= */
-
-function getEnglishDate() {
-
-    const now = new Date();
-
-    return now.toLocaleDateString(
-        "en-GB",
-        {
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
+        if (month < 0) {
+            month = 11;
+            year--;
         }
-    );
+
+        day += monthLengths[month];
+    }
+
+    banglaDateElement.textContent =
+        `${day} ${monthNames[month]} ${year}`;
 }
 
 
-/* =========================================================
-   UPDATE TIME
-   ========================================================= */
+/* =========================
+   ENGLISH DATE
+========================= */
+
+function updateEnglishDate() {
+
+    const englishDateElement =
+        document.getElementById("englishDate");
+
+    if (!englishDateElement) return;
+
+    const today = new Date();
+
+    const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    };
+
+    englishDateElement.textContent =
+        today.toLocaleDateString("en-US", options);
+}
+
+
+/* =========================
+   LIVE TIME
+========================= */
 
 function updateTime() {
 
     const timeElement =
-        document.getElementById(
-            "englishTime"
-        );
+        document.getElementById("currentTime");
 
-    if (!timeElement) {
-        return;
-    }
+    if (!timeElement) return;
 
     const now = new Date();
 
-    const hours =
-        String(
-            now.getHours()
-        ).padStart(2, "0");
+    const timeString =
+        now.toLocaleTimeString("en-US", {
+            timeZone: "Asia/Dhaka",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        });
 
-    const minutes =
-        String(
-            now.getMinutes()
-        ).padStart(2, "0");
-
-    const seconds =
-        String(
-            now.getSeconds()
-        ).padStart(2, "0");
-
-    timeElement.textContent =
-        hours +
-        ":" +
-        minutes +
-        ":" +
-        seconds;
+    timeElement.textContent = timeString + " BST";
 }
 
 
-/* =========================================================
-   UPDATE DATE
-   ========================================================= */
-
-function updateDate() {
-
-    const banglaDateElement =
-        document.getElementById(
-            "banglaDate"
-        );
-
-    const englishDateElement =
-        document.getElementById(
-            "englishDate"
-        );
-
-    if (banglaDateElement) {
-
-        banglaDateElement.textContent =
-            getBanglaDate();
-    }
-
-    if (englishDateElement) {
-
-        englishDateElement.textContent =
-            getEnglishDate();
-    }
-}
-
-
-/* =========================================================
-   SEARCH SETUP
-   ========================================================= */
+/* =========================
+   SEARCH
+========================= */
 
 function setupSearch() {
 
-    const searchButton =
-        document.getElementById(
-            "searchButton"
-        );
-
-    const searchPanel =
-        document.getElementById(
-            "searchPanel"
-        );
-
     const searchInput =
-        document.getElementById(
-            "searchInput"
-        );
+        document.getElementById("searchInput");
 
-    const searchSubmit =
-        document.getElementById(
-            "searchSubmit"
-        );
+    if (!searchInput) return;
 
-    if (
-        !searchButton ||
-        !searchPanel
-    ) {
-        return;
-    }
+    searchInput.addEventListener("input", function () {
 
-    searchButton.addEventListener(
-        "click",
-        function () {
+        const keyword =
+            this.value.trim().toLowerCase();
 
-            searchPanel.classList.toggle(
-                "show"
-            );
-
-            if (
-                searchPanel.classList.contains(
-                    "show"
-                ) &&
-                searchInput
-            ) {
-
-                searchInput.focus();
-            }
+        if (!keyword) {
+            displayNews(newsData);
+            return;
         }
-    );
 
-    if (searchSubmit) {
-
-        searchSubmit.addEventListener(
-            "click",
-            function () {
-
-                performSearch();
-            }
-        );
-    }
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key === "Enter"
-                ) {
-
-                    performSearch();
-                }
-            }
-        );
-    }
-}
-
-
-/* =========================================================
-   SEARCH
-   ========================================================= */
-
-function performSearch() {
-
-    const searchInput =
-        document.getElementById(
-            "searchInput"
-        );
-
-    if (!searchInput) {
-        return;
-    }
-
-    const query =
-        searchInput.value
-            .trim()
-            .toLowerCase();
-
-    if (!query) {
-
-        displayNews(newsData);
-
-        return;
-    }
-
-    const results =
-        newsData.filter(
-            function (news) {
-
-                const title =
-                    String(
-                        news.title || ""
-                    ).toLowerCase();
-
-                const description =
-                    String(
-                        news.short_description || ""
-                    ).toLowerCase();
-
-                const content =
-                    String(
-                        news.content || ""
-                    ).toLowerCase();
-
-                const category =
-                    String(
-                        news.category || ""
-                    ).toLowerCase();
+        const filtered =
+            newsData.filter(news => {
 
                 return (
-                    title.includes(query) ||
-                    description.includes(query) ||
-                    content.includes(query) ||
-                    category.includes(query)
-                );
-            }
-        );
+                    String(news.title || "")
+                        .toLowerCase()
+                        .includes(keyword) ||
 
-    displayNews(results);
+                    String(news.short_description || "")
+                        .toLowerCase()
+                        .includes(keyword) ||
+
+                    String(news.content || "")
+                        .toLowerCase()
+                        .includes(keyword) ||
+
+                    String(news.category || "")
+                        .toLowerCase()
+                        .includes(keyword)
+                );
+
+            });
+
+        displayNews(filtered);
+    });
 }
 
 
-/* =========================================================
+/* =========================
    NAVIGATION
-   ========================================================= */
+========================= */
 
 function setupNavigation() {
 
-    const navItems =
-        document.querySelectorAll(
-            ".nav-item"
-        );
+    const navLinks =
+        document.querySelectorAll(".nav-link");
 
-    navItems.forEach(
-        function (item) {
+    navLinks.forEach(link => {
 
-            item.addEventListener(
-                "click",
-                function (event) {
+        link.addEventListener("click", function (event) {
 
-                    event.preventDefault();
+            event.preventDefault();
 
-                    navItems.forEach(
-                        function (nav) {
+            const category =
+                this.textContent.trim();
 
-                            nav.classList.remove(
-                                "active"
-                            );
-                        }
-                    );
-
-                    item.classList.add(
-                        "active"
-                    );
-
-                    const category =
-                        item.textContent.trim();
-
-                    /*
-                       প্রচ্ছদ এবং সর্বশেষ
-                       সব সংবাদ দেখাবে
-                    */
-
-                    if (
-                        category === "প্রচ্ছদ" ||
-                        category === "সর্বশেষ"
-                    ) {
-
-                        displayNews(
-                            newsData
-                        );
-
-                        return;
-                    }
-
-                    /*
-                       নির্দিষ্ট category
-                    */
-
-                    const filteredNews =
-                        newsData.filter(
-                            function (news) {
-
-                                return (
-                                    String(
-                                        news.category || ""
-                                    )
-                                    .trim()
-                                    .toLowerCase()
-                                    ===
-                                    category
-                                    .toLowerCase()
-                                );
-                            }
-                        );
-
-                    displayNews(
-                        filteredNews
-                    );
-                }
+            navLinks.forEach(item =>
+                item.classList.remove("active")
             );
-        }
-    );
+
+            this.classList.add("active");
+
+            if (
+                category === "প্রচ্ছদ" ||
+                category === "সর্বশেষ"
+            ) {
+                displayNews(newsData);
+                return;
+            }
+
+            const filtered =
+                newsData.filter(news =>
+                    String(news.category || "").trim() === category
+                );
+
+            displayNews(filtered);
+        });
+    });
 }
 
 
-/* =========================================================
-   LOAD NEWS FROM GOOGLE SHEETS
-   ========================================================= */
+/* =========================
+   LOAD NEWS
+========================= */
 
 async function loadNews() {
+
+    const container =
+        document.getElementById("newsContainer");
+
+    if (!container) return;
 
     try {
 
         const response =
-            await fetch(
-                API_URL +
-                "?t=" +
-                Date.now()
-            );
+            await fetch(API_URL + "?t=" + Date.now());
 
         if (!response.ok) {
-
-            throw new Error(
-                "HTTP error: " +
-                response.status
-            );
+            throw new Error("Network error");
         }
 
         const data =
             await response.json();
 
-        console.log(
-            "THE EFFECT NEWS:",
-            data
-        );
-
-        if (
-            !Array.isArray(data)
-        ) {
-
-            throw new Error(
-                "Invalid news data"
-            );
+        if (!Array.isArray(data)) {
+            throw new Error("Invalid data");
         }
 
-        /*
-           সর্বশেষ news আগে দেখানো
-        */
+        newsData = data.reverse();
 
-        newsData =
-            [...data].reverse();
-
-        displayNews(
-            newsData
-        );
-
-        displayPopularNews();
-
-        updateBreakingNews();
+        displayNews(newsData);
+        displayPopularNews(newsData);
+        updateBreakingNews(newsData);
 
     } catch (error) {
 
-        console.error(
-            "THE EFFECT NEWS ERROR:",
-            error
-        );
+        console.error(error);
 
-        const newsContainer =
-            document.getElementById(
-                "newsContainer"
-            );
-
-        const emptyNews =
-            document.getElementById(
-                "emptyNews"
-            );
-
-        if (newsContainer) {
-
-            newsContainer.innerHTML = "";
-        }
-
-        if (emptyNews) {
-
-            emptyNews.style.display =
-                "block";
-
-            emptyNews.innerHTML = `
-                <h2>
-                    সংবাদ লোড করা যাচ্ছে না
-                </h2>
-
-                <p>
-                    Google Sheets-এর সঙ্গে
-                    সংযোগ পরীক্ষা করুন।
-                </p>
-            `;
-        }
+        container.innerHTML = `
+            <div class="empty-news">
+                সংবাদ লোড করা যাচ্ছে না।
+            </div>
+        `;
     }
 }
 
 
-/* =========================================================
-   IMAGE URL
-   ========================================================= */
+/* =========================
+   GET IMAGE
+========================= */
 
-function getImageURL(imagePath) {
+function getImageURL(image) {
 
-    if (!imagePath) {
+    if (!image) return "";
 
-        return "";
-    }
-
-    const image =
-        String(
-            imagePath
-        ).trim();
-
-    if (
-        image.startsWith("http://") ||
-        image.startsWith("https://")
-    ) {
-
-        return image;
-    }
-
-    return image;
+    return String(image).trim();
 }
 
 
-/* =========================================================
+/* =========================
    DISPLAY NEWS
-   ========================================================= */
+========================= */
 
-function displayNews(newsList) {
+function displayNews(data) {
 
-    const newsContainer =
-        document.getElementById(
-            "newsContainer"
-        );
+    const container =
+        document.getElementById("newsContainer");
 
-    const emptyNews =
-        document.getElementById(
-            "emptyNews"
-        );
+    if (!container) return;
 
-    if (!newsContainer) {
+    if (!data.length) {
 
-        return;
-    }
-
-    newsContainer.innerHTML = "";
-
-    /*
-       কোনো news না থাকলে
-    */
-
-    if (
-        !newsList ||
-        newsList.length === 0
-    ) {
-
-        if (emptyNews) {
-
-            emptyNews.style.display =
-                "block";
-        }
+        container.innerHTML = `
+            <div class="empty-news">
+                কোনো সংবাদ পাওয়া যায়নি।
+            </div>
+        `;
 
         return;
     }
 
-    if (emptyNews) {
-
-        emptyNews.style.display =
-            "none";
-    }
-
-    newsList.forEach(
-        function (news) {
-
-            const article =
-                document.createElement(
-                    "article"
-                );
-
-            article.className =
-                "news-card";
+    container.innerHTML =
+        data.map(news => {
 
             const imageURL =
-                getImageURL(
-                    news.image
-                );
+                getImageURL(news.image);
 
-            let imageHTML = "";
+            const imageHTML =
+                imageURL
+                    ? `
+                        <img
+                            src="${escapeHTML(imageURL)}"
+                            alt="${escapeHTML(news.title || "")}"
+                            class="news-image"
+                        >
+                    `
+                    : "";
 
-            if (imageURL) {
+            return `
+                <article
+                    class="news-card"
+                    onclick="openNews('${encodeURIComponent(String(news.id || ""))}')"
+                    style="cursor:pointer;"
+                >
 
-                imageHTML = `
-                    <img
-                        class="news-image"
-                        src="${escapeHTML(imageURL)}"
-                        alt="${escapeHTML(
-                            news.title ||
-                            "THE EFFECT"
-                        )}"
-                        loading="lazy"
-                    >
-                `;
-            }
+                    ${imageHTML}
 
-            article.innerHTML = `
+                    <div class="news-card-content">
 
-                ${imageHTML}
+                        <div class="news-category">
+                            ${escapeHTML(news.category || "সংবাদ")}
+                        </div>
 
-                <div class="news-card-content">
+                        <h2 class="news-title">
+                            ${escapeHTML(news.title || "")}
+                        </h2>
 
-                    <div class="news-category">
-                        ${escapeHTML(
-                            news.category || ""
-                        )}
-                    </div>
+                        <p class="news-description">
+                            ${escapeHTML(news.short_description || "")}
+                        </p>
 
-                    <h2 class="news-title">
-                        ${escapeHTML(
-                            news.title || ""
-                        )}
-                    </h2>
+                        <div class="news-meta">
 
-                    <p class="news-description">
-                        ${escapeHTML(
-                            news.short_description || ""
-                        )}
-                    </p>
+                            <span>
+                                ${escapeHTML(news.author || "THE EFFECT")}
+                            </span>
 
-                    <div class="news-meta">
+                            <span>
+                                ${escapeHTML(news.date || "")}
+                            </span>
 
-                        <span>
-                            ${escapeHTML(
-                                news.author ||
-                                "THE EFFECT"
-                            )}
-                        </span>
-
-                        <span>
-                            ${escapeHTML(
-                                news.date || ""
-                            )}
-                        </span>
+                        </div>
 
                     </div>
 
-                </div>
+                </article>
             `;
 
-            newsContainer.appendChild(
-                article
-            );
-        }
-    );
+        }).join("");
 }
 
 
-/* =========================================================
-   POPULAR NEWS
-   ========================================================= */
+/* =========================
+   OPEN NEWS ARTICLE
+========================= */
 
-function displayPopularNews() {
+function openNews(id) {
+
+    if (!id) return;
+
+    window.location.href =
+        "news.html?id=" + id;
+}
+
+
+/* =========================
+   POPULAR NEWS
+========================= */
+
+function displayPopularNews(data) {
 
     const popularContainer =
-        document.getElementById(
-            "popularNews"
-        );
+        document.getElementById("popularNews");
 
-    if (!popularContainer) {
+    if (!popularContainer) return;
 
-        return;
-    }
+    const popular =
+        data.slice(0, 5);
 
-    popularContainer.innerHTML = "";
+    popularContainer.innerHTML =
+        popular.map((news, index) => {
 
-    newsData
-        .slice(0, 5)
-        .forEach(
-            function (news, index) {
-
-                const item =
-                    document.createElement(
-                        "div"
-                    );
-
-                item.className =
-                    "popular-item";
-
-                item.innerHTML = `
+            return `
+                <div
+                    class="popular-item"
+                    onclick="openNews('${encodeURIComponent(String(news.id || ""))}')"
+                    style="cursor:pointer;"
+                >
 
                     <span class="popular-number">
                         ${index + 1}
                     </span>
 
-                    <div class="popular-content">
+                    <span class="popular-title">
+                        ${escapeHTML(news.title || "")}
+                    </span>
 
-                        <h3 class="popular-title">
-                            ${escapeHTML(
-                                news.title || ""
-                            )}
-                        </h3>
+                </div>
+            `;
 
-                        <span>
-                            ${escapeHTML(
-                                news.date || ""
-                            )}
-                        </span>
-
-                    </div>
-
-                `;
-
-                popularContainer.appendChild(
-                    item
-                );
-            }
-        );
+        }).join("");
 }
 
 
-/* =========================================================
+/* =========================
    BREAKING NEWS
-   ========================================================= */
+========================= */
 
-function updateBreakingNews() {
+function updateBreakingNews(data) {
 
-    const breakingTrack =
-        document.getElementById(
-            "breakingTrack"
-        );
+    const breakingContainer =
+        document.getElementById("breakingNews");
 
-    if (!breakingTrack) {
+    if (!breakingContainer) return;
 
-        return;
-    }
+    const latest =
+        data.slice(0, 5);
+
+    breakingContainer.innerHTML =
+        latest.map(news => {
+
+            return `
+                <span
+                    class="breaking-item"
+                    onclick="openNews('${encodeURIComponent(String(news.id || ""))}')"
+                    style="cursor:pointer;"
+                >
+                    ${escapeHTML(news.title || "")}
+                </span>
+            `;
+
+        }).join(" • ");
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(text) {
 
     if (
-        !newsData ||
-        newsData.length === 0
+        text === null ||
+        text === undefined
     ) {
-
-        breakingTrack.innerHTML =
-            "<span>এই মুহূর্তে কোনো ব্রেকিং নিউজ নেই</span>";
-
-        return;
+        return "";
     }
 
-    const latestNews =
-        newsData.slice(0, 5);
-
-    breakingTrack.innerHTML =
-        latestNews
-            .map(
-                function (news) {
-
-                    return `
-                        <span>
-                            ${escapeHTML(
-                                news.title || ""
-                            )}
-                        </span>
-                    `;
-                }
-            )
-            .join("");
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
-/* =========================================================
-   SECURITY / HTML ESCAPE
-   ========================================================= */
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-}
-
-
-/* =========================================================
-   PAGE START
-   ========================================================= */
+/* =========================
+   START
+========================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        /*
-           Date
-        */
-
-        updateDate();
-
-        /*
-           Time
-        */
-
+        updateBanglaDate();
+        updateEnglishDate();
         updateTime();
-
-        /*
-           প্রতি ১ সেকেন্ডে time update
-        */
 
         setInterval(
             updateTime,
             1000
         );
 
-        /*
-           Search
-        */
-
         setupSearch();
-
-        /*
-           Navigation
-        */
-
         setupNavigation();
-
-        /*
-           Google Sheets থেকে news
-        */
-
         loadNews();
 
-        /*
-           Footer year
-        */
+        const yearElement =
+            document.getElementById("footerYear");
 
-        const currentYear =
-            document.getElementById(
-                "currentYear"
-            );
-
-        if (currentYear) {
-
-            currentYear.textContent =
-                new Date()
-                    .getFullYear();
+        if (yearElement) {
+            yearElement.textContent =
+                new Date().getFullYear();
         }
 
     }
