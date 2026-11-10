@@ -111,28 +111,24 @@ function updateEnglishDate() {
 /* =========================
    LIVE TIME
 ========================= */
-
 function updateTime() {
-
-    const timeElement =
-        document.getElementById("currentTime");
+    const timeElement = document.getElementById("englishTime");
 
     if (!timeElement) return;
 
     const now = new Date();
 
-    const timeString =
-        now.toLocaleTimeString("en-US", {
-            timeZone: "Asia/Dhaka",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: true
-        });
+    const timeString = now.toLocaleTimeString("en-GB", {
+        timeZone: "Asia/Dhaka",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+    });
 
-    timeElement.textContent = timeString + " BST";
+    timeElement.textContent = timeString;
 }
-
+}
 
 /* =========================
    SEARCH
