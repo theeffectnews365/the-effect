@@ -2,84 +2,57 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwwIeOGkKq0mc6VJoeYG8l-
 
 let newsData = [];
 
+
 /* =========================
    BANGLA DATE
 ========================= */
 
 function updateBanglaDate() {
-    const banglaDateElement = document.getElementById("banglaDate");
+    const el = document.getElementById("banglaDate");
+    if (!el) return;
 
-    if (!banglaDateElement) return;
+    const now = new Date();
 
-    const today = new Date();
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Dhaka",
+        year: "numeric",
+        month: "numeric",
+        day: "numeric"
+    }).formatToParts(now);
 
-    const referenceDate = new Date("2026-09-16T00:00:00");
-    const referenceBanglaDay = 1;
-    const referenceBanglaMonth = 6;
-    const referenceBanglaYear = 1433;
+    const get = type => Number(parts.find(p => p.type === type).value);
 
-    const difference =
-        Math.floor(
-            (today - referenceDate) / (1000 * 60 * 60 * 24)
-        );
+    const year = get("year");
+    const month = get("month");
+    const day = get("day");
 
-    const monthNames = [
-        "বৈশাখ",
-        "জ্যৈষ্ঠ",
-        "আষাঢ়",
-        "শ্রাবণ",
-        "ভাদ্র",
-        "আশ্বিন",
-        "কার্তিক",
-        "অগ্রহায়ণ",
-        "পৌষ",
-        "মাঘ",
-        "ফাল্গুন",
-        "চৈত্র"
+    const months = [
+        "বৈশাখ", "জ্যৈষ্ঠ", "আষাঢ়", "শ্রাবণ",
+        "ভাদ্র", "আশ্বিন", "কার্তিক", "অগ্রহায়ণ",
+        "পৌষ", "মাঘ", "ফাল্গুন", "চৈত্র"
     ];
 
-    const monthLengths = [
-        31,
-        31,
-        31,
-        31,
-        30,
-        30,
-        30,
-        30,
-        30,
-        30,
-        30,
-        30
-    ];
+    const lengths = [31,31,31,31,31,30,30,30,30,30,30,30];
 
-    let day = referenceBanglaDay + difference;
-    let month = referenceBanglaMonth;
-    let year = referenceBanglaYear;
+    const start = Date.UTC(year, 3, 14);
+    const current = Date.UTC(year, month - 1, day);
 
-    while (day > monthLengths[month]) {
-        day -= monthLengths[month];
-        month++;
+    let diff = Math.floor((current - start) / 86400000);
+    let banglaYear = year - 593;
 
-        if (month >= 12) {
-            month = 0;
-            year++;
-        }
+    if (diff < 0) {
+        banglaYear--;
+        diff += 365;
     }
 
-    while (day <= 0) {
-        month--;
+    let banglaMonth = 0;
 
-        if (month < 0) {
-            month = 11;
-            year--;
-        }
-
-        day += monthLengths[month];
+    while (banglaMonth < 11 && diff >= lengths[banglaMonth]) {
+        diff -= lengths[banglaMonth];
+        banglaMonth++;
     }
 
-    banglaDateElement.textContent =
-        `${day} ${monthNames[month]} ${year}`;
+    el.textContent = `${diff + 1} ${months[banglaMonth]} ${banglaYear}`;
 }
 
 
@@ -88,47 +61,52 @@ function updateBanglaDate() {
 ========================= */
 
 function updateEnglishDate() {
+    const el = document.getElementById("englishDate");
+    if (!el) return;
 
-    const englishDateElement =
-        document.getElementById("englishDate");
-
-    if (!englishDateElement) return;
-
-    const today = new Date();
-
-    const options = {
+    el.textContent = new Date().toLocaleDateString("en-GB", {
+        timeZone: "Asia/Dhaka",
         weekday: "long",
-        year: "numeric",
+        day: "numeric",
         month: "long",
-        day: "numeric"
-    };
-
-    englishDateElement.textContent =
-        today.toLocaleDateString("en-US", options);
+        year: "numeric"
+    });
 }
 
 
 /* =========================
    LIVE TIME
 ========================= */
+
 function updateTime() {
-    const timeElement = document.getElementById("englishTime");
+    const el = document.getElementById("englishTime");
+    if (!el) return;
 
-    if (!timeElement) return;
-
-    const now = new Date();
-
-    const timeString = now.toLocaleTimeString("en-GB", {
+    el.textContent = new Date().toLocaleTimeString("en-GB", {
         timeZone: "Asia/Dhaka",
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
         hour12: false
     });
+}
 
-    timeElement.textContent = timeString;
+
+/* =========================
+   START DATE & TIME
+========================= */
+
+function updateDateTime() {
+    updateBanglaDate();
+    updateEnglishDate();
+    updateTime();
 }
-}
+
+updateDateTime();
+
+setInterval(updateTime, 1000);
+setInterval(updateDateTime, 60000);
+
 
 /* =========================
    SEARCH
